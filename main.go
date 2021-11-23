@@ -22,6 +22,11 @@ type JSONResponse struct {
 
 func main() {
 
+	listActivities := []ToDo{}
+
+	listActivities = append(listActivities, ToDo{"Learning RESTAPI with Golang", "2021-11-05"})
+	listActivities = append(listActivities, ToDo{"Testing Endpoint GET", "2021-11-06"})
+
 	// create endpoint
 	http.HandleFunc("/", func(rw http.ResponseWriter, r *http.Request) {
 		// GET /
@@ -31,18 +36,21 @@ func main() {
 			res := JSONResponse{
 				http.StatusOK,
 				true,
-				"Testing Get Method",
-				[]ToDo{},
+				"List of activities success",
+				listActivities,
 			}
 
 			// convert res to json
 			dataJSON, err := json.Marshal(res)
 
 			if err != nil {
+				fmt.Println("Something Wrong")
 				http.Error(rw, "Something wrong", http.StatusInternalServerError)
+				return
 			}
 
 			rw.Write(dataJSON)
+			return
 
 		} else if r.Method == "POST" {
 
